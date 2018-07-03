@@ -4,7 +4,7 @@ import './index.css';
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className="square" onClick={props.onClick} style={{backgroundColor: props.backgroundColor}}>
       {props.value}
     </button>
   );
@@ -12,6 +12,21 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
+    const winner = calculateWinner(this.props.squares)
+
+    if (winner) {
+      if (winner.winningSquares.indexOf(i) > -1) {
+        return (
+          <Square
+            key={"square" + i}
+            value={this.props.squares[i]}
+            onClick={() => this.props.onClick(i)}
+            backgroundColor="yellow"
+          />
+        );
+      }
+    }
+
     return (
       <Square
         key={"square" + i}
@@ -123,7 +138,7 @@ class Game extends React.Component {
 
     let status;
     if (winner) {
-      status = 'Winner: ' + winner;
+      status = 'Winner: ' + winner.winnerName;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
     }
@@ -160,7 +175,10 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        "winnerName": squares[a],
+        "winningSquares": [a, b, c]
+      };
     }
   }
   return null;
