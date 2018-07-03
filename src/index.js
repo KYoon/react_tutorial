@@ -94,12 +94,6 @@ class Game extends React.Component {
     }
   }
 
-  reverseMovesOrder(i) {
-    this.setState({
-      movesAreAscending: !this.state.movesAreAscending
-    })
-  }
-
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -113,9 +107,12 @@ class Game extends React.Component {
       } else {
         desc = 'Go to game start'
       }
+      const buttonStyle = move === this.state.stepNumber ?
+        {fontWeight: "bold"} :
+        null;
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)} style={buttonStyle}>{desc}</button>
         </li>
       );
     });
